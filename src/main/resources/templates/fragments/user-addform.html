@@ -1,0 +1,47 @@
+<div class="container col-6 form-group text-center">
+    <form role="form" id="user-addform" th:action="@{/admin}" th:method="post" th:object="${user}">
+    <div>
+        <label for="newFirstName">First name</label>
+        <input type="text" class="form-control" placeholder="Enter first name" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('firstName')} ? 'is-invalid'" th:field="*{firstName}" id="newFirstName">
+        <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('firstName')}">
+            <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('firstName')}" th:text="${error.getDefaultMessage()}"/>
+        </th:block>
+    </div>
+    <div>
+        <label for="newLastName">Last name</label>
+        <input type="text" class="form-control" placeholder="Enter last name" th:field="*{lastName}" id="newLastName">
+    </div>
+    <div>
+        <label for="newAge">Age</label>
+        <input type="number" class="form-control" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('age')} ? 'is-invalid'" th:field="*{age}" id="newAge">
+        <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('age')}">
+            <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('age')}" th:text="${error.getDefaultMessage()}"/>
+        </th:block>
+    </div>
+    <div>
+        <label for="newEmail">E-mail</label>
+        <input type="text" class="form-control" placeholder="Enter e-mail" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('email')} ? 'is-invalid'" th:field="*{email}" id="newEmail" autocomplete="username">
+        <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('email')}">
+            <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('email')}" th:text="${error.getDefaultMessage()}"/>
+        </th:block>
+    </div>
+    <div id="password-div">
+        <label for="newPassword">Password</label>
+        <input type="password" class="form-control" placeholder="Enter password" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('password')} ? 'is-invalid'" id="newPassword" name="password" autocomplete="current-password">
+        <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('password')}">
+            <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('password')}" th:text="${error.getDefaultMessage()}"/>
+        </th:block>
+    </div>
+    <div>
+        <label for="newRoles">Role</label>
+        <select multiple class="form-control" id="newRoles" name="roles">
+            <option th:each="role : ${allRoles}"
+                    th:selected="*{hasRole('__${role.id}__')}" th:text="${role.name}"
+                    th:value="${role.id}">
+        </select>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-success mt-3">Add new User</button>
+    </div>
+    </form>
+</div>

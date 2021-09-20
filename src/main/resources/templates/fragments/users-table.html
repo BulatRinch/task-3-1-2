@@ -1,0 +1,37 @@
+<table class="table table-borderless m-3">
+  <thead>
+  <tr class="border-top">
+    <th scope="col">ID</th>
+    <th scope="col">First name</th>
+    <th scope="col">Last name</th>
+    <th scope="col">Age</th>
+    <th scope="col">E-mail</th>
+    <th scope="col">Roles</th>
+    <th scope="col">Edit</th>
+    <th scope="col">Delete</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="border-top bg-light" th:each="user, rowStat : ${users}"
+      th:classappend="${rowStat.count % 2 != 0 ? 'table-secondary' : 'table-light'}">
+    <td th:text="${user.id}"/>
+    <td th:text="${user.firstName}"/>
+    <td th:text="${user.lastName}"/>
+    <td th:text="${user.age}"/>
+    <td th:text="${user.email}"/>
+    <td>
+      <th:block th:each="role : ${user.getRoles()}">
+        &nbsp;<span th:text="${role.name}"/>
+      </th:block>
+    </td>
+    <td>
+      <a th:href="@{/admin/{id}/profile(id=${user.id})}"
+         class="btn btn-sm btn-info edit-button">Edit</a>
+    </td>
+    <td>
+      <a th:href="@{/admin/{id}/profile(id=${user.id})}"
+         class="btn btn-sm btn-danger delete-button">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>

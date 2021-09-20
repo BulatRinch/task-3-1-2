@@ -1,0 +1,62 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h3 class="modal-title">Delete or edit user</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form role="form" id="userprofile-form" th:action="@{/admin}" th:method="post" th:object="${user}">
+    <div class="modal-body">
+        <div class="container col-6 text-center">
+            <div class="form-group text-center">
+                <input id="method" type="hidden" name="_method" value="post">
+                <div>
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" th:field="*{id}" id="id" readonly>
+                </div>
+                <div>
+                    <label for="firstName">First name</label>
+                    <input type="text" class="form-control" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('firstName')} ? 'is-invalid'" th:field="*{firstName}" id="firstName">
+                    <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('firstName')}">
+                        <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('firstName')}" th:text="${error.getDefaultMessage()}"/>
+                    </th:block>
+                </div>
+                <div>
+                    <label for="lastName">Last name</label>
+                    <input type="text" class="form-control" th:field="*{lastName}" id="lastName">
+                </div>
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" class="form-control" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('age')} ? 'is-invalid'" th:field="*{age}" id="age">
+                    <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('age')}">
+                        <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('age')}" th:text="${error.getDefaultMessage()}"/>
+                    </th:block>
+                </div>
+                <div>
+                    <label for="email">E-mail</label>
+                    <input type="text" class="form-control" th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('email')} ? 'is-invalid'" th:field="*{email}" id="email" autocomplete="username">
+                    <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('email')}">
+                        <div class="invalid-feedback" th:each="error : ${bindingResult.getFieldErrors('email')}" th:text="${error.getDefaultMessage()}"/>
+                    </th:block>
+                </div>
+                <div id="password-div">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="current-password">
+                </div>
+                <div>
+                    <label for="roles">Role</label>
+                    <select multiple class="form-control" id="roles" name="roles">
+                        <option th:each="role : ${allRoles}"
+                                th:selected="*{hasRole('__${role.id}__')}" th:text="${role.name}"
+                                th:value="${role.id}">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn submit">Save</button>
+    </div>
+    </form>
+</div>
