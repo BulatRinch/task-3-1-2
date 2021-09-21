@@ -1,6 +1,8 @@
-package ru.itsinfo.springbootsecurityusersbootstrap.model;
+package com.example.demo.model;
 
-
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,8 +15,12 @@ import java.util.*;
 
 @Entity
 @Table(name = "users", indexes = {@Index(columnList = "name, last_name ASC")})
-public final class User extends AbstractEntity<Long> implements UserDetails {
+public final class User implements UserDetails {
     private static final long serialVersionUID = 2715270014679085151L;
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "name")
     @NotEmpty(message = "Name should not be empty")
@@ -35,7 +41,8 @@ public final class User extends AbstractEntity<Long> implements UserDetails {
     @Positive(message = "Age should not be empty")
     private int age;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<>();
 
@@ -109,6 +116,18 @@ public final class User extends AbstractEntity<Long> implements UserDetails {
         }
         Optional<Role> findRole = roles.stream().filter(role -> roleId == role.getId()).findFirst();
         return findRole.isPresent();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
+        return null == getId();
     }
 
     @Override

@@ -1,7 +1,7 @@
-package ru.itsinfo.springbootsecurityusersbootstrap.repository;
+package com.example.demo.repository;
 
+import com.example.demo.model.Role;
 import org.springframework.data.repository.CrudRepository;
-import ru.itsinfo.springbootsecurityusersbootstrap.model.Role;
 
 public interface RoleRepository extends CrudRepository<Role, Integer> {
 }

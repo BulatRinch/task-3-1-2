@@ -1,4 +1,4 @@
-package ru.itsinfo.springbootsecurityusersbootstrap.config.handler;
+package com.example.demo.config.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Set;
 
 @Component
-public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     @Override

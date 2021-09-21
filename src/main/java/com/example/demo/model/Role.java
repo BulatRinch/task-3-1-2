@@ -1,18 +1,20 @@
-package ru.itsinfo.springbootsecurityusersbootstrap.model;
+package com.example.demo.model;
 
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
-public final class Role extends AbstractEntity<Integer> implements GrantedAuthority {
+public final class Role implements GrantedAuthority {
     private static final long serialVersionUID = 7217778059836250424L;
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(unique = true)
     private String name;
@@ -37,6 +39,18 @@ public final class Role extends AbstractEntity<Integer> implements GrantedAuthor
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
+        return null == getId();
     }
 
     @Override

@@ -7,8 +7,6 @@
 <div class="container">
     <form class="form-signin" th:method="POST" th:action="@{/}">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <div th:if="${authenticationName}" class="alert alert-success" role="alert" th:text="|Good bye, ${authenticationName}!|"/>
-        <div th:if="${authenticationException.getMessage()}" class="alert alert-danger" role="alert" th:text="${authenticationException.getMessage()}"/>
         <p>
             <label for="email" class="sr-only">Username</label>
             <input type="text" id="email" name="email" class="form-control" placeholder="Email" autocomplete="username" required autofocus>
@@ -22,9 +20,9 @@
         <div class="primary">&nbsp;</div>
         <div class="alert alert-info" role="alert">
             <p><b>Using</b><br/>
-            admin@mail.com : admin<br/></p>
+            admin@mail.ru : admin<br/></p>
             <p><b>or</b><br/>
-            user@mail.com : user<br/></p>
+            user@mail.ru : user<br/></p>
         </div>
     </form>
 </div>

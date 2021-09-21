@@ -1,57 +1,38 @@
-package ru.itsinfo.springbootsecurityusersbootstrap.config;
+package com.example.demo.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.config.handler.AuthenticationSuccessHandler;
+import com.example.demo.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.itsinfo.springbootsecurityusersbootstrap.config.handler.CustomAccessDeniedHandler;
-import ru.itsinfo.springbootsecurityusersbootstrap.config.handler.CustomAuthenticationFailureHandler;
-import ru.itsinfo.springbootsecurityusersbootstrap.config.handler.CustomAuthenticationSuccessHandler;
-import ru.itsinfo.springbootsecurityusersbootstrap.config.handler.CustomUrlLogoutSuccessHandler;
-import ru.itsinfo.springbootsecurityusersbootstrap.service.AppService;
 
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // сервис, с помощью которого тащим пользователя
-    private final AppService appService;
+    private final UserService userService;
 
     private final PasswordEncoder passwordEncoder;
 
     // класс, в котором описана логика перенаправления пользователей по ролям
-    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    // класс, в котором описана логика при неудачной авторизации
-    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
-
-    // класс, в котором описана логика при удачной авторизации
-    private final CustomUrlLogoutSuccessHandler urlLogoutSuccessHandler;
-
-    // класс, в котором описана логика при отказе в доступе
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-
-    @Autowired
-    public ApplicationSecurityConfig(AppService appServiceTmp,
+    public ApplicationSecurityConfig(UserService userServiceTmp,
                                      PasswordEncoder passwordEncoder,
-                                     CustomAuthenticationSuccessHandler authenticationSuccessHandler,
-                                     CustomAuthenticationFailureHandler authenticationFailureHandler,
-                                     CustomUrlLogoutSuccessHandler urlLogoutSuccessHandler,
-                                     CustomAccessDeniedHandler accessDeniedHandler) {
-        this.appService = appServiceTmp;
+                                     AuthenticationSuccessHandler authenticationSuccessHandler) {
+        this.userService = userServiceTmp;
         this.passwordEncoder = passwordEncoder;
         this.authenticationSuccessHandler = authenticationSuccessHandler;
-        this.authenticationFailureHandler = authenticationFailureHandler;
-        this.urlLogoutSuccessHandler = urlLogoutSuccessHandler;
-        this.accessDeniedHandler = accessDeniedHandler;
+
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(appService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -63,13 +44,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+                .and();
         http.formLogin()
                 .loginPage("/") // указываем страницу с формой логина
                 .permitAll()  // даем доступ к форме логина всем
                 .successHandler(authenticationSuccessHandler) //указываем логику обработки при удачном логине
-                .failureHandler(authenticationFailureHandler) //указываем логику обработки при неудачном логине
                 .usernameParameter("email") // Указываем параметры логина и пароля с формы логина
                 .passwordParameter("password");
         http.logout()
@@ -78,7 +57,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/?logout")
-                .logoutSuccessHandler(urlLogoutSuccessHandler)
                 .permitAll();
     }
 }

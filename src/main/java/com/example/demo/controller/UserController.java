@@ -1,11 +1,11 @@
-package ru.itsinfo.springbootsecurityusersbootstrap.controller;
+package com.example.demo.controller;
 
+import com.example.demo.model.User;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.itsinfo.springbootsecurityusersbootstrap.model.User;
 
 @Controller
 @RequestMapping("/user")
